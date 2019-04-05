@@ -1,0 +1,17 @@
+image: "python:latest"
+stages:
+  - deploy
+
+variables:
+  AWS_DEFAULT_REGION: ap-northeast-1 # 対象のリージョンを設定
+  BUCKET_NAME: -----------   # バケット名を設定
+
+deploys3:
+  stage: deploy
+  before_script:
+    - pip install awscli # Install the SDK
+  script:
+    - aws s3 cp . s3://${BUCKET_NAME}/ --recursive # gitlabのコピー元ルートとS3のアップ先ディレクトリを指定
+  only:
+    refs:
+      - master # 特定のブランチだけデプロイしたい場合は指定する
